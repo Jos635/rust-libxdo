@@ -189,6 +189,23 @@ impl XDo {
                                                    string.as_ptr(),
                                                    delay_microsecs))
     }
+    /// Get mouse position (x, y, screen_num)
+    pub fn get_mouse_position(&self) -> Result<(i32, i32, i32), OpError> {
+        let mut x = 0;
+        let mut y = 0;
+        let mut screen_num = 0;
+        xdo!(sys::xdo_get_mouse_location(self.handle, &mut x, &mut y, &mut screen_num))?;
+
+        Ok((x, y, screen_num))
+    }
+    /// Get mouse position (x, y, screen_num)
+    pub fn get_screen_size(&self, screen_num: i32) -> Result<(u32, u32), OpError> {
+        let mut w = 0;
+        let mut h = 0;
+        xdo!(sys::xdo_get_viewport_dimensions(self.handle, &mut w, &mut h, screen_num))?;
+
+        Ok((w, h))
+    }
 }
 
 impl Drop for XDo {
